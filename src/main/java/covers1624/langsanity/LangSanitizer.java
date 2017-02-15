@@ -28,7 +28,8 @@ public class LangSanitizer {
     public static void run(File langFolder, File outputFolder, File remapFile) {
         if (remapFile != null) {
             if (!remapFile.exists()) {
-                LogHelper.errorError("Remap file specified but does not exist..", new FileNotFoundException(remapFile.getAbsolutePath()));
+                LogHelper.error("Remap file specified but does not exist..");
+                new FileNotFoundException(remapFile.getAbsolutePath()).printStackTrace();
             } else {
                 parseRemapFile(remapFile);
             }
@@ -60,7 +61,8 @@ public class LangSanitizer {
                         entry = new LangEntry(remapKey(split[0]), split[1]);
                         positionKeyMap.put(idx, split[0]);
                     } catch (Exception e) {
-                        LogHelper.fatalError("Error reading line %s!", e, idx);
+                        LogHelper.fatal("Error reading line %s!", idx);
+                        e.printStackTrace();
                         idx++;
                         continue;
                     }
@@ -195,7 +197,8 @@ public class LangSanitizer {
                     }
                     idx++;
                 } catch (Exception e) {
-                    LogHelper.fatalError("Error reading line %s!", e, idx);
+                    LogHelper.fatal("Error reading line %s!", idx);
+                    e.printStackTrace();
                     idx++;
                 }
             }
