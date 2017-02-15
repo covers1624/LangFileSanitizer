@@ -139,7 +139,11 @@ public class LangSanitizer {
         if (langMap.containsKey(line)) {
             return langMap.get(line);
         } else {
-            return usLangEntries.get(line);
+            DataEntry entry = usLangEntries.get(line);
+            if (entry instanceof LangEntry) {
+                LogHelper.info("Key %s missing from locale %s.. Using en_US translation..", ((LangEntry) entry).getKey(), locale);
+            }
+            return entry;
         }
     }
 
