@@ -47,7 +47,7 @@ public class LangSanitizer {
             while((line = reader.readLine()) != null) {
                 DataEntry entry;
                 if (line.isEmpty()) {
-                    entry = new StringEntry("\n");
+                    entry = new StringEntry("");
                 } else if (line.startsWith("#") || line.startsWith("//")) {
                     if (line.startsWith("//")) {
                         line = "#" + line.substring(2);

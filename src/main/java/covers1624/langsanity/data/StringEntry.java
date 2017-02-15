@@ -18,7 +18,7 @@ public class StringEntry extends DataEntry {
 
     @Override
     public String toString() {
-        if (entry.equals("\n")) {
+        if (entry.equals("")) {
             return "NewLine.";
         }
         return super.toString();
