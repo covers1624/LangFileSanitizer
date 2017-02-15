@@ -7,6 +7,7 @@ import covers1624.langsanity.data.StringEntry;
 import covers1624.langsanity.util.LangFileFilter;
 import covers1624.langsanity.util.LogHelper;
 import covers1624.langsanity.util.ResourceWalker;
+import covers1624.langsanity.util.Utils;
 import org.apache.commons.io.FileUtils;
 
 import java.io.*;
@@ -69,9 +70,9 @@ public class LangSanitizer {
         } catch (Exception e) {
             throw new RuntimeException("Failed to read en_US language file!", e);
         }
-
+        Utils.tryCreateDirectory(outputFolder);
         try {
-            PrintWriter writer = new PrintWriter(new FileWriter(new File(outputFolder, "en_US.lang")));
+            PrintWriter writer = new PrintWriter(new FileWriter(Utils.tryCreateFile(new File(outputFolder, "en_US.lang"))));
             for (int line = 0; line < usLangEntries.keySet().size(); line++) {
                 DataEntry entry = usLangEntries.get(line + 1);
                 writer.println(entry.getEntry());
@@ -104,7 +105,7 @@ public class LangSanitizer {
 
         for (Map.Entry<String, List<DataEntry>> entry : invalidLocaleEntries.entrySet()) {
             try {
-                PrintWriter writer = new PrintWriter(new FileWriter(new File(outputFolder, entry.getKey() + ".lang.old")));
+                PrintWriter writer = new PrintWriter(new FileWriter(Utils.tryCreateFile(new File(outputFolder, entry.getKey() + ".lang.old"))));
                 for (DataEntry e : entry.getValue()) {
                     writer.println(e.getEntry());
                 }
@@ -211,7 +212,7 @@ public class LangSanitizer {
 
     public static void writeLangFile(File file, String locale) {
         try {
-            PrintWriter writer = new PrintWriter(new FileWriter(file));
+            PrintWriter writer = new PrintWriter(new FileWriter(Utils.tryCreateFile(file)));
             for (int line = 0; line < usLangEntries.keySet().size(); line++) {
                 DataEntry entry = getDataEntryForLocale(line + 1, locale);
                 writer.println(entry.getEntry());
