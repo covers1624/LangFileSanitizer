@@ -22,7 +22,7 @@ configFile.withReader {
     prop.load(it)
     project.ext.config = new ConfigSlurper().parse prop
 }
-String buildNo = 1
+String buildNo = 2
 version = "${project.config.version}." + buildNo
 
 def commonManifest = {

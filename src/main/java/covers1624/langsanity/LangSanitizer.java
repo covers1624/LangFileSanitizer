@@ -33,11 +33,6 @@ public class LangSanitizer {
             }
         }
         File usLangFile = new File(langFolder, "en_US.lang");
-        try {
-            FileUtils.copyFile(usLangFile, new File(outputFolder, "en_US.lang"));
-        } catch (Exception e) {
-            throw new RuntimeException("Fatal exception whilst copying en_US lang file to output directory.", e);
-        }
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(usLangFile));
@@ -61,7 +56,7 @@ public class LangSanitizer {
                     }
                     try {
                         String[] split = line.split("=");
-                        entry = new LangEntry(split[0], split[1]);
+                        entry = new LangEntry(remapKey(split[0]), split[1]);
                         positionKeyMap.put(idx, split[0]);
                     } catch (Exception e) {
                         LogHelper.fatalError("Error reading line %s!", e, idx);
@@ -73,6 +68,18 @@ public class LangSanitizer {
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to read en_US language file!", e);
+        }
+
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter(new File(outputFolder, "en_US.lang")));
+            for (int line = 0; line < usLangEntries.keySet().size(); line++) {
+                DataEntry entry = usLangEntries.get(line + 1);
+                writer.println(entry.getEntry());
+            }
+            writer.flush();
+            writer.close();
+        } catch (Exception e) {
+            throw new RuntimeException("Fatal exception whilst copying en_US lang file to output directory.", e);
         }
 
         LogHelper.info("Loaded following remaps..");
