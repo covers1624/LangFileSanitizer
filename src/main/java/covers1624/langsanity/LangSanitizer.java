@@ -1,5 +1,6 @@
 package covers1624.langsanity;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
 import covers1624.langsanity.data.DataEntry;
 import covers1624.langsanity.data.LangEntry;
@@ -8,7 +9,6 @@ import covers1624.langsanity.util.LangFileFilter;
 import covers1624.langsanity.util.LogHelper;
 import covers1624.langsanity.util.ResourceWalker;
 import covers1624.langsanity.util.Utils;
-import org.apache.commons.io.FileUtils;
 
 import java.io.*;
 import java.util.*;
@@ -37,7 +37,7 @@ public class LangSanitizer {
         File usLangFile = new File(langFolder, "en_US.lang");
 
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(usLangFile));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(usLangFile), Charsets.UTF_8));
 
             String line;
             int idx = 1;
@@ -74,7 +74,7 @@ public class LangSanitizer {
         }
         Utils.tryCreateDirectory(outputFolder);
         try {
-            PrintWriter writer = new PrintWriter(new FileWriter(Utils.tryCreateFile(new File(outputFolder, "en_US.lang"))));
+            PrintWriter writer = new PrintWriter(Utils.tryCreateFile(new File(outputFolder, "en_US.lang")), Charsets.UTF_8.name());
             for (int line = 0; line < usLangEntries.keySet().size(); line++) {
                 DataEntry entry = usLangEntries.get(line + 1);
                 writer.println(entry.getEntry());
@@ -107,7 +107,7 @@ public class LangSanitizer {
 
         for (Map.Entry<String, List<DataEntry>> entry : invalidLocaleEntries.entrySet()) {
             try {
-                PrintWriter writer = new PrintWriter(new FileWriter(Utils.tryCreateFile(new File(outputFolder, entry.getKey() + ".lang.old"))));
+                PrintWriter writer = new PrintWriter(Utils.tryCreateFile(new File(outputFolder, entry.getKey() + ".lang.old")), Charsets.UTF_8.name());
                 for (DataEntry e : entry.getValue()) {
                     writer.println(e.getEntry());
                 }
@@ -121,7 +121,7 @@ public class LangSanitizer {
 
     public static void parseRemapFile(File remapFile) {
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(remapFile));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(remapFile), Charsets.UTF_8));
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -177,7 +177,7 @@ public class LangSanitizer {
         List<DataEntry> invalidLines = new LinkedList<>();
 
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(langFile));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(langFile), Charsets.UTF_8));
 
             String line;
             int idx = 1;
@@ -215,7 +215,7 @@ public class LangSanitizer {
 
     public static void writeLangFile(File file, String locale) {
         try {
-            PrintWriter writer = new PrintWriter(new FileWriter(Utils.tryCreateFile(file)));
+            PrintWriter writer = new PrintWriter(Utils.tryCreateFile(file), Charsets.UTF_8.name());
             for (int line = 0; line < usLangEntries.keySet().size(); line++) {
                 DataEntry entry = getDataEntryForLocale(line + 1, locale);
                 writer.println(entry.getEntry());
